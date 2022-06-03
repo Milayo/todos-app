@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Todo from "./Todos-item";
 import { toast } from "react-toastify";
+import { Wrapper } from "./Todos-page-styles";
 
 export interface TodoProps {
   id: number;
@@ -65,26 +66,25 @@ const TodoPage: React.FC<TodoProps> = () => {
   };
 
   return (
-    <div className="todopage">
+    <Wrapper>
       {loading && <h1>Loading...</h1>}
       {!loading && (
-        <div>
-          <h2>
-            {todos.map((todo: TodoProps) => (
-              <Todo
-                id={todo.id}
-                key={todo.id}
-                completed={todo.completed}
-                title={todo.title}
-                onClick={() => notify(todo.id)}
-                onDoubleClick={() => DeleteTodo(todo.id)}
-              />
-            ))}
-          </h2>
+        <div className="todos">
+          <h2>My Todos</h2>
+          {todos.map((todo: TodoProps) => (
+            <Todo
+              id={todo.id}
+              key={todo.id}
+              completed={todo.completed}
+              title={todo.title}
+              onClick={() => notify(todo.id)}
+              onDoubleClick={() => DeleteTodo(todo.id)}
+            />
+          ))}
         </div>
       )}
       {show && <button onClick={handleButtonClick}>FETCH TODOS</button>}
-    </div>
+    </Wrapper>
   );
 };
 
