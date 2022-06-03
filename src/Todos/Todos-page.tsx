@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Todo from "./Todos-item";
-import { toast } from "react-toastify";
-import { Wrapper } from "./Todos-page-styles";
+import { Wrapper, Button } from "./Todos-page-styles";
 
 export interface TodoProps {
+  userId: number;
   id: number;
   title: string;
   completed: boolean;
@@ -14,30 +14,7 @@ export interface TodoProps {
 const TodoPage: React.FC<TodoProps> = () => {
   const [todos, setTodos] = useState<TodoProps[] | any>([]);
   const [error, setError] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [show, setShow] = useState<boolean>(true);
-
-  const ToastInfo = () => {
-    return (
-      <>
-        <div>Name: Ijarotimi Ayomi</div>
-        <div>email: sjhjhce</div>
-      </>
-    );
-  };
-
-  const notify = (id: number) =>
-    toast.info(<ToastInfo />, {
-      toastId: id,
-      theme: "dark",
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined
-    });
+  const [loading, setLoading] = useState(false);
 
   const fetchTodos = async () => {
     setLoading(true);
@@ -48,15 +25,15 @@ const TodoPage: React.FC<TodoProps> = () => {
       const data = await response.json();
       setTodos(data);
       console.log(data);
+      setLoading(false);
     } catch (error) {
       setError(error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleButtonClick = () => {
     fetchTodos();
-    setShow(false);
   };
 
   const DeleteTodo = (id: number) => {
@@ -67,6 +44,7 @@ const TodoPage: React.FC<TodoProps> = () => {
 
   return (
     <Wrapper>
+      {error && alert(error)}
       {loading && <h1>Loading...</h1>}
       {!loading && (
         <div className="todos">
@@ -74,16 +52,18 @@ const TodoPage: React.FC<TodoProps> = () => {
           {todos.map((todo: TodoProps) => (
             <Todo
               id={todo.id}
+              userId={todo.userId}
               key={todo.id}
               completed={todo.completed}
               title={todo.title}
-              onClick={() => notify(todo.id)}
               onDoubleClick={() => DeleteTodo(todo.id)}
             />
           ))}
         </div>
       )}
-      {show && <button onClick={handleButtonClick}>FETCH TODOS</button>}
+      {!todos.length && !loading && (
+        <Button onClick={handleButtonClick}>FETCH TODOS</Button>
+      )}
     </Wrapper>
   );
 };
