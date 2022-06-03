@@ -35,7 +35,6 @@ const Todo: React.FC<TodoProps> = ({
   id,
   userId,
   title,
-  onClick,
   onDoubleClick
 }) => {
   const [error, setError] = useState<any>();
@@ -46,7 +45,6 @@ const Todo: React.FC<TodoProps> = ({
         `https://jsonplaceholder.typicode.com/users/${userId}`
       );
       const data = await response.json();
-      console.log(data);
       notify(id, data?.name, data?.email);
     } catch (error) {
       setError(error);

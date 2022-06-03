@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Todo from "./Todos-item";
 import { Wrapper, Button } from "./Todos-page-styles";
 
@@ -7,7 +7,6 @@ export interface TodoProps {
   id: number;
   title: string;
   completed: boolean;
-  onClick: () => void;
   onDoubleClick: (id: number) => void;
 }
 
@@ -24,7 +23,6 @@ const TodoPage: React.FC<TodoProps> = () => {
       );
       const data = await response.json();
       setTodos(data);
-      console.log(data);
       setLoading(false);
     } catch (error) {
       setError(error);
@@ -38,7 +36,6 @@ const TodoPage: React.FC<TodoProps> = () => {
 
   const DeleteTodo = (id: number) => {
     const newTodos = todos.filter((todo: TodoProps) => id !== todo.id);
-    console.log(newTodos);
     setTodos(newTodos);
   };
 
